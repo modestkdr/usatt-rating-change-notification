@@ -1,15 +1,15 @@
 var Xray = require("x-ray");
 var fs = require("fs");
 var AWS = require('aws-sdk');
-var sns = new AWS.SNS();
-var docClient = new AWS.DynamoDB.DocumentClient();
 var config = require("./config.js");
-
 AWS.config.update({
     "region": config.aws.region,
     "accessKeyId": config.aws.accessKeyId,
     "secretAccessKey": config.aws.secretAccessKey
 });
+
+var docClient = new AWS.DynamoDB.DocumentClient();
+var sns = new AWS.SNS();
 
 var msgOptions = {
     Message: "",
@@ -36,7 +36,9 @@ exports.handler = (event, context, callback) => {
 
   docClient.get(readParams, function(err, data) {
 
-    if (err) console.log(JSON.stringify(err, null, 2));
+    if (err) {
+      console.log("dynamodb err"); console.log(JSON.stringify(err, null, 2));
+    }
     
     else {
 
@@ -83,6 +85,3 @@ exports.handler = (event, context, callback) => {
     }       
   });  
 };
-
-
-
